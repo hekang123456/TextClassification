@@ -53,7 +53,7 @@ g_ua = 'Dalvik/1.6.0 (Linux; U; Android 4.4.4; MuMu Build/V417IR) NewsArticle/6.
 g_id_cache = {}
 g_count = 0
 
-def get_data(tup):
+def get_data(tup, file_name):
     global g_id_cache
     global g_count
     cid = tup[0]
@@ -74,7 +74,7 @@ def get_data(tup):
 
 
     jj = json.loads(response.text)
-    with open('toutiao_cat_data.txt', 'a') as fp:
+    with open(file_name, 'a', encoding='utf-8') as fp:
         for item in jj['data']:
             item = item['content']
             item = item.replace('\"', '"')
@@ -82,41 +82,49 @@ def get_data(tup):
             # item = item.decode('utf-8')
             item = json.loads(item)
             kws = ''
-            if item.has_key('keywords'):
+            if item.__contains__('keywords'):
                 kws = item['keywords']
             
-            if item.has_key('ad_id'):
-                print 'ad'
-            elif not item.has_key('item_id') or not item.has_key('title'):
-                print 'bad'
+            if item.__contains__('ad_id'):
+                print('ad')
+            elif not item.__contains__('item_id') or not item.__contains__('title'):
+                print('bad')
             else:
                 item_id = item['item_id']
-                print  g_count, cid, cname, item['item_id'], item['title'], kws
-                if g_id_cache.has_key(item_id):
-                    print 'dulp'
+                print(g_count, cid, cname, item['item_id'], item['title'], kws)
+                if g_id_cache.__contains__(item_id):
+                    print('dulp')
                 else:
                     g_id_cache[item_id] = 1
                     line = u"{}_!_{}_!_{}_!_{}_!_{}".format(item['item_id'], cid, cname, item['title'], kws)
                     line = line.replace('\n', '').replace('\r', '')
                     line = line + '\n'
-                    fp.write(line.encode('utf-8'))
+                    fp.write(line)
                     g_count += 1
     
 
 def get_routine():
     global g_count
-    with open('toutiao_cat_data.txt', 'r') as fp:
+    with open('toutiao_cat_data.txt', 'r', encoding='utf-8') as fp:
         ll = fp.readlines()
         g_count = len(ll)
-        for l in ll:
+        for l in lad:
             ww = l.split('_!_')
             item_id = int(ww[0])
             g_id_cache[item_id] = 1
-        print 'load cache done, ', g_count
+        print('load cache done, ', g_count)
 
-    while 1:
-        time.sleep(10)
-        for tp in g_cnns:
-            get_data(tp)
+
+# hk: 可以直接从网上获取数据。
+get_data_f_net = False
+# hk:将从网上获取得到的数据保存到本地的文件； 设置文件名。
+file_name = "toutiao_hk_data.hk"
+
+# hk:从网上获取数据知道获取得到让自己满意数量的数据为止。
+while get_data_f_net:
+    time.sleep(10)
+    # hk:这个循环的目的是为了获取不同标签的数据集，是的所得到的数据类别是分布均匀的。
+    for tp in g_cnns:
+        get_data(tp,  file_name)
 
 get_routine()
