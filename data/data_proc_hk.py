@@ -27,7 +27,7 @@ def get_stop_words(my_path = None):
       result.append(line.strip())
   return result
 
-def get_tfidfvect(data_num = 10000):
+def get_tfidfvect(data_num= 10000) :
   """返回 tf-idf 的矩阵以及，对应的标签
 
   data_num: 选择训练文本的数量，最多是 382688 条训练数据
