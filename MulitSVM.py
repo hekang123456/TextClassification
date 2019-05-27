@@ -51,10 +51,7 @@ def model_train(train_datas, train_labels):
 def model_test(test_data,test_labels):
   tests= []
   for item in test_data.toarray():
-    tmp = []
-    for it in item:
-      tmp.append(it)
-    tests.append(tmp)
+    tests.append(item.tolist())
   test_data = tests
 
   # 加载模型并预测
@@ -66,10 +63,7 @@ def model_test(test_data,test_labels):
 def model_pred(pred_data):
   tests= []
   for item in pred_data.toarray():
-    tmp = []
-    for it in item:
-      tmp.append(it)
-    tests.append(tmp)
+    tests.append(item.tolist())
   pred_data = tests
 
   with open(model_save, 'rb') as f:

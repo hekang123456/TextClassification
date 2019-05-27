@@ -9,6 +9,9 @@ import jieba
 data_path = os.path.join(os.path.dirname(__file__), "toutiao_cat_data.txt")
 
 def get_data(my_path = None):
+  """从文本中获取训练数据，返回一个字典
+  格式： id: 类别id, 类别， 第一个句子， 第二个句子
+  """
   if not my_path: my_path = data_path
   result = {}
   with open(my_path, 'r', encoding='utf-8') as f:
@@ -19,6 +22,7 @@ def get_data(my_path = None):
   return result
 
 def get_stop_words(my_path = None):
+  """从文件中获取停词列表，返回这个列表。"""
   result = []
   if my_path is None:
     my_path = os.path.join(os.path.dirname(__file__), "chinese_stop_words.hk")
